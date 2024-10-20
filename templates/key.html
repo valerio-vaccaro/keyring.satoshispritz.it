@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>TAG: {{uid}} <a href="static/{{uid}}.txt" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
-                <p>The following file was created in the same time NFC tag was programmed.</p>
+                <h3>File portachiavi #{{uid}} <a href="static/{{uid}}.txt" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
+                <p>All'atto della creazione del portachiavi è stato registrato un file con il seguente contenuto.</p>
                 <pre>{{file}}</pre>
             </div>
         </div>
@@ -14,9 +14,14 @@
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>Creation timestamp</h3>
-                <p>The file was timestamped using the Bitcoin blockchain and the Opentimestamps protocol</p>
+                <h3>Verifica del timestamp</h3>
+                <p>Il file così creato è stato timestampato sulla blockchain di Bitcoin usando il protocollo Opentimenstamps. Segue una verifica della validità del timestamping.</p>
                 <pre>{{verify}}</pre>
+                <p>Chiunque voglia verificare autonomamente tali scritture può scaricare il file generato e la ricevuta mediante i bottoni azzurri e ripetere la prova installando un client Opentimestamps</p>
+                <pre>
+sudo npm i -g opentimestamps
+ots-cli.js v -i {{uid}}.txt.ots
+                </pre>
             </div>
         </div>
     </div>
@@ -24,8 +29,10 @@
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>Opentimestamps proof <a href="static/{{uid}}.txt.ots" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
+                <h3>Prova Opentimenstamps completa <a href="static/{{uid}}.txt.ots" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
+                <p>La prova Opentimenstamps completa può essere scaricata qui, la struttura della prova è stata resa leggibile (agli ingegneri) qui sotto.</p>
                 <pre>{{info}}.</pre>
+                <p>Complimenti sei arrivato in fondo :)</p>
             </div>
         </div>
     </div>
