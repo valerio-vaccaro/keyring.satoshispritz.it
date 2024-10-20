@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satoshi Spritz Keychain</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for Bitcoin Logo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .stat-box {
+            background: white;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .satoshi-spritz-logo {
+            width: 200px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container text-center">
+    <img src="static/SSLogo.png" alt="Satoshi Spritz Logo" class="satoshi-spritz-logo">
+    <h1 class="mb-4">Satoshi Spritz Keychain</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="stat-box">
+                <h3>Distribuzione</h3>
+                <p>Satoshi Spritz Lugano<br />
+                24-10-2024 dalle 18</p>
+                <p>Trinity Irish Pub<br />
+                Via Luigi Canonica 19<br />
+                Lugano, CH 6900</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box">
+                <h3>Portachiavi disponibili</h3>
+                <h1>200</h1>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box">
+                <h3>DIY</h3>
+                <a href="https://makerworld.com/it/models/660752#profileId-587936" target="_blank"><button type="button" class="btn btn-warning">File per stampante 3d</button></a>
+                <br />
+                <a href="https://github.com/valerio-vaccaro/keyring.satoshispritz.it" target="_blank"><button type="button" class="btn btn-danger">Sorgenti di queste pagine.</button></a>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    {% block content %}{% endblock %}
+
+</div>
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

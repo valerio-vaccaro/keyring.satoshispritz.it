@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+    {% block content %}
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <div class="stat-box">
+                <h3>TAG: {{uid}} <a href="static/{{uid}}.txt" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
+                <p>The following file was created in the same time NFC tag was programmed.</p>
+                <pre>{{file}}</pre>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <div class="stat-box">
+                <h3>Creation timestamp</h3>
+                <p>The file was timestamped using the Bitcoin blockchain and the Opentimestamps protocol</p>
+                <pre>{{verify}}</pre>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12 text-left">
+            <div class="stat-box">
+                <h3>Opentimestamps proof <a href="static/{{uid}}.txt.ots" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
+                <pre>{{info}}.</pre>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
