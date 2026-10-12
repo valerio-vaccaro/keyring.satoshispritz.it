@@ -4,9 +4,13 @@
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>File portachiavi #{{uid}} <a href="static/{{uid}}.txt" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
-                <p>All'atto della creazione del portachiavi è stato registrato un file con il seguente contenuto.</p>
+                <h3>{{ t.keychain_file }} #{{uid}} <a href="{{ file_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-info">{{ t.download }}</a></h3>
+                {% if is_pdf %}
+                <p>{{ t.pdf_recorded }}</p>
+                {% else %}
+                <p>{{ t.file_recorded }}</p>
                 <pre>{{file}}</pre>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -14,14 +18,14 @@
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>Verifica del timestamp</h3>
-                <p>Il file così creato è stato timestampato sulla blockchain di Bitcoin usando il protocollo Opentimenstamps. Segue una verifica della validità del timestamping.</p>
+                <h3>{{ t.timestamp_verification }}</h3>
+                <p>{{ t.timestamp_description }}</p>
                 <pre>{{verify}}</pre>
-                <p>Chiunque voglia verificare autonomamente tali scritture può scaricare il file generato e la ricevuta mediante i bottoni azzurri e ripetere la prova installando un client Opentimestamps</p>
-                <pre>
-sudo npm i -g opentimestamps
-ots-cli.js v -i {{uid}}.txt.ots
-                </pre>
+                {% if proof_exists %}
+                <p>{{ t.verify_independently }}</p>
+                <pre>sudo npm i -g opentimestamps
+ots-cli.js v -i {{proof_filename}}</pre>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -29,10 +33,10 @@ ots-cli.js v -i {{uid}}.txt.ots
     <div class="row">
         <div class="col-md-12 text-left">
             <div class="stat-box">
-                <h3>Prova Opentimenstamps completa <a href="static/{{uid}}.txt.ots" target="_blank"><button type="button" class="btn btn-info">DOWNLOAD</button></a></h3>
-                <p>La prova Opentimenstamps completa può essere scaricata qui, la struttura della prova è stata resa leggibile (agli ingegneri) qui sotto.</p>
+                <h3>{{ t.full_proof }} {% if proof_exists %}<a href="{{ proof_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-info">{{ t.download }}</a>{% endif %}</h3>
+                <p>{{ t.proof_description }}</p>
                 <pre>{{info}}.</pre>
-                <p>Complimenti sei arrivato in fondo :)</p>
+                <p>{{ t.end_message }}</p>
             </div>
         </div>
     </div>

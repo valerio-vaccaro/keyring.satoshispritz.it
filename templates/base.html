@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,52 +9,239 @@
     <!-- Font Awesome for Bitcoin Logo -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
+        :root {
+            --spritz-orange: #f7941d;
+            --spritz-deep: #b85b12;
+            --spritz-ink: #28251f;
+            --spritz-muted: #716b63;
+        }
         body {
-            background-color: #f8f9fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--spritz-ink);
+            background: radial-gradient(ellipse at 50% -15%, #fff7e7 0, #fffaf2 42%, #f4eee5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-        .stat-box {
-            background: white;
-            border: 1px solid #dee2e6;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .floating-logos {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
         }
+        .floating-logos img {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: var(--size);
+            height: auto;
+            opacity: var(--opacity);
+            animation: logo-drift var(--duration) ease-in-out var(--delay) infinite alternate;
+            will-change: transform;
+        }
+        @keyframes logo-drift {
+            from { transform: translate3d(-16px, 24px, 0) rotate(-12deg); }
+            to { transform: translate3d(24px, -30px, 0) rotate(14deg); }
+        }
+        .page-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1180px;
+            padding-bottom: 48px;
+        }
+        .language-switcher {
+            position: absolute;
+            top: 16px;
+            right: 15px;
+            z-index: 3;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 3px;
+            max-width: 340px;
+            padding: 5px;
+            border: 1px solid rgba(113, 87, 53, .12);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .84);
+            box-shadow: 0 5px 16px rgba(68, 50, 28, .08);
+        }
+        .language-switcher a {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 30px;
+            border-radius: 999px;
+            font-size: 1.2rem;
+            line-height: 1;
+            text-decoration: none;
+            transition: background .18s ease, transform .18s ease;
+        }
+        .language-switcher a:hover { transform: translateY(-1px); background: #fff1d9; }
+        .language-switcher a.active { background: #fff1d9; box-shadow: inset 0 0 0 1px rgba(247, 148, 29, .25); }
+        .hero { padding: 34px 0 24px; }
         .satoshi-spritz-logo {
-            width: 200px;
-            margin: 20px auto;
+            width: 96px;
+            margin: 0 auto 12px;
             display: block;
+            filter: drop-shadow(0 8px 16px rgba(184, 91, 18, .16));
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 800;
+            letter-spacing: -.045em;
+        }
+        .hero-subtitle { margin: 8px 0 4px; color: var(--spritz-muted); font-size: 1.05rem; }
+        .hero-editions {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 7px 13px;
+            border: 1px solid rgba(247, 148, 29, .3);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .72);
+            color: var(--spritz-deep);
+            font-size: .82rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .keychain-stage { display: flex; justify-content: center; align-items: center; min-height: 190px; margin: 0 auto 22px; }
+        .keychain-edition {
+            margin: 12px 0 0;
+            color: var(--spritz-muted);
+            font-size: .82rem;
+            font-weight: 600;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+        .keychain-count { margin: 0; color: var(--spritz-deep); font-size: 2.2rem; font-weight: 700; line-height: 1.15; }
+        .keychain-image {
+            display: block;
+            width: 100%;
+            max-width: 185px;
+            height: 190px;
+            margin: 0;
+            object-fit: contain;
+            filter: drop-shadow(0 14px 16px rgba(93, 62, 28, .18));
+        }
+        .info-card, .stat-box {
+            height: 100%;
+            min-height: 235px;
+            padding: 25px 20px;
+            border: 1px solid rgba(113, 87, 53, .12);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .88);
+            box-shadow: 0 12px 30px rgba(68, 50, 28, .07);
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+            backdrop-filter: blur(8px);
+        }
+        .info-card:hover { transform: translateY(-5px); border-color: rgba(247, 148, 29, .38); box-shadow: 0 18px 34px rgba(68, 50, 28, .12); }
+        .card-icon {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 14px;
+            border-radius: 15px;
+            background: #fff1d9;
+            color: var(--spritz-deep);
+            font-size: 1.2rem;
+        }
+        .info-card h2 { margin: 0 0 14px; font-size: 1.15rem; font-weight: 750; }
+        .info-card p { color: #5f5a53; line-height: 1.6; }
+        .info-card .event-name { margin-bottom: 4px; color: var(--spritz-ink); font-weight: 700; }
+        .info-card .event-date { color: var(--spritz-deep); font-weight: 700; }
+        .info-card .event-address { margin-bottom: 0; font-size: .92rem; }
+        .edition-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f0e8dc; }
+        .edition-row:last-child { border-bottom: 0; }
+        .edition-row .keychain-edition { margin: 0; }
+        .edition-row .keychain-count { font-size: 1.8rem; }
+        .project-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            width: 100%;
+            margin: 8px 0;
+            padding: 11px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none !important;
+            transition: transform .18s ease, filter .18s ease;
+        }
+        .project-link:hover { transform: translateY(-2px); filter: brightness(.97); }
+        .maker-link { background: #fff0d6; color: #8a4b0b; }
+        .source-link { background: #29251f; color: white; }
+        .about-card { margin-top: 28px; text-align: left; }
+        .about-card p:last-child { margin-bottom: 0; }
+        @media (max-width: 767.98px) {
+            .hero { padding-top: 92px; }
+            .language-switcher { top: 10px; right: 10px; max-width: min(340px, calc(100vw - 30px)); }
+            .floating-logos img:nth-child(n+11) { display: none; }
+            .info-card { min-height: 0; margin-bottom: 16px; }
+            .keychain-stage, .keychain-image { min-height: 160px; height: 160px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="container text-center">
-    <img src="static/SSLogo.png" alt="Satoshi Spritz Logo" class="satoshi-spritz-logo">
-    <h1 class="mb-4">Satoshi Spritz Keychain</h1>
+<div class="floating-logos" aria-hidden="true">
+</div>
+
+<div class="container text-center page-content">
+    <nav class="language-switcher" aria-label="{{ t.language }}">
+        {% for code, flag, name in languages %}
+        <a href="{{ lang_url(code) }}" class="{{ 'active' if lang == code else '' }}" aria-label="{{ name }}" title="{{ name }}" {% if lang == code %}aria-current="page"{% endif %}>{{ flag }}</a>
+        {% endfor %}
+    </nav>
+    <header class="hero">
+        <img src="static/SSLogo.png" alt="Satoshi Spritz Logo" class="satoshi-spritz-logo">
+        <h1>Satoshi Spritz Keychain</h1>
+        <span class="hero-editions"><i class="fas fa-star" aria-hidden="true"></i> {{ t.editions }}</span>
+    </header>
+    <div class="keychain-stage">
+        <img src="static/keychain-cutout.png" alt="{{ t.product_alt }}" class="keychain-image">
+    </div>
     <div class="row">
-        <div class="col-md-4">
-            <div class="stat-box">
-                <h3>Distribuzione</h3>
-                <p>Satoshi Spritz Lugano<br />
-                24-10-2024 dalle 18</p>
-                <p>Trinity Irish Pub<br />
-                Via Luigi Canonica 19<br />
-                Lugano, CH 6900</p>
-            </div>
+        <div class="col-md-3">
+            <section class="info-card">
+                <div class="card-icon"><i class="far fa-calendar-alt" aria-hidden="true"></i></div>
+                <h2>{{ t.distribution_2024 }}</h2>
+                <p class="event-name">Satoshi Spritz Lugano</p>
+                <p class="event-date"><i class="far fa-clock" aria-hidden="true"></i> {{ t.date_2024 }}</p>
+                <p class="event-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Trinity Irish Pub<br />Via Luigi Canonica 19,<br />Lugano, CH 6900</p>
+            </section>
         </div>
-        <div class="col-md-4">
-            <div class="stat-box">
-                <h3>Portachiavi disponibili</h3>
-                <h1>200</h1>
-            </div>
+        <div class="col-md-3">
+            <section class="info-card">
+                <div class="card-icon"><i class="fas fa-calendar-check" aria-hidden="true"></i></div>
+                <h2>{{ t.distribution_2026 }}</h2>
+                <p class="event-name">Satoshi Spritz Lugano</p>
+                <p class="event-date"><i class="far fa-clock" aria-hidden="true"></i> {{ t.date_2026 }}</p>
+                <p class="event-address"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Piazza Cioccaro,<br />Lugano, CH 6900</p>
+            </section>
         </div>
-        <div class="col-md-4">
-            <div class="stat-box">
-                <h3>DIY</h3>
-                <a href="https://makerworld.com/it/models/660752#profileId-587936" target="_blank"><button type="button" class="btn btn-warning">File per stampante 3d</button></a>
-                <br />
-                <a href="https://github.com/valerio-vaccaro/keyring.satoshispritz.it" target="_blank"><button type="button" class="btn btn-danger">Sorgenti di queste pagine.</button></a>
-            </div>
+        <div class="col-md-3">
+            <section class="info-card">
+                <div class="card-icon"><i class="fas fa-key" aria-hidden="true"></i></div>
+                <h2>{{ t.keychains_made }}</h2>
+                <div class="edition-row"><span class="keychain-edition">{{ t.edition_2024 }}</span><span class="keychain-count">200</span></div>
+                <div class="edition-row"><span class="keychain-edition">{{ t.edition_2026 }}</span><span class="keychain-count">200</span></div>
+            </section>
+        </div>
+        <div class="col-md-3">
+            <section class="info-card">
+                <div class="card-icon"><i class="fas fa-cubes" aria-hidden="true"></i></div>
+                <h2>DIY</h2>
+                <p>{{ t.want_make }}</p>
+                <a class="project-link maker-link" href="https://makerworld.com/it/models/660752#profileId-587936" target="_blank" rel="noopener noreferrer"><i class="fas fa-cube" aria-hidden="true"></i> {{ t.files_3d }}</a>
+                <a class="project-link source-link" href="https://github.com/valerio-vaccaro/keyring.satoshispritz.it" target="_blank" rel="noopener noreferrer"><i class="fab fa-github" aria-hidden="true"></i> {{ t.source_code }}</a>
+            </section>
         </div>
     </div>
     <br />
@@ -64,6 +251,26 @@
 </div>
 
 <!-- Bootstrap JS (optional) -->
+<script>
+    (function () {
+        const field = document.querySelector('.floating-logos');
+        if (!field) return;
+
+        const count = window.matchMedia('(max-width: 767.98px)').matches ? 10 : 20;
+        for (let i = 0; i < count; i += 1) {
+            const logo = document.createElement('img');
+            logo.src = 'static/SSLogo.png';
+            logo.alt = '';
+            logo.style.setProperty('--x', `${Math.random() * 96}%`);
+            logo.style.setProperty('--y', `${Math.random() * 96}%`);
+            logo.style.setProperty('--size', `${36 + Math.random() * 104}px`);
+            logo.style.setProperty('--opacity', `${0.05 + Math.random() * 0.09}`);
+            logo.style.setProperty('--duration', `${8 + Math.random() * 22}s`);
+            logo.style.setProperty('--delay', `${-Math.random() * 24}s`);
+            field.appendChild(logo);
+        }
+    }());
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

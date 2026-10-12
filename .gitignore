@@ -162,3 +162,8 @@ cython_debug/
 #.idea/
 venv
 static
+!static/
+static/*
+!static/SSLogo.png
+!static/keychain-cutout.png
+!static/keychain-original.webp
