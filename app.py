@@ -55,7 +55,7 @@ def not_found_response():
 
 @app.route('/key')
 def key():
-    uid = (request.args.get('uid') or '').strip()
+    uid = (request.args.get('uid') or '').strip().replace(':', '')
     if not re.fullmatch(r'[A-Za-z0-9_-]+', uid):
         return not_found_response()
 
