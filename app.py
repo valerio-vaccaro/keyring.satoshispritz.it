@@ -102,10 +102,10 @@ def key():
     if proof_path.is_file():
         try:
             info_result = run_ots_command(
-                'info', ['/usr/local/bin/ots-cli.js', 'i', str(proof_path)]
+                'info', ['/usr/bin/node', '/usr/local/bin/ots-cli.js', 'i', str(proof_path)]
             )
             verify_result = run_ots_command(
-                'verify', ['/usr/local/bin/ots-cli.js', 'v', str(proof_path), '-i']
+                'verify', ['/usr/bin/node', '/usr/local/bin/ots-cli.js', 'v', str(proof_path), '-i']
             )
             info = info_result.stdout.strip() or proof_unavailable
             verify = verify_result.stdout.strip() or proof_unavailable
