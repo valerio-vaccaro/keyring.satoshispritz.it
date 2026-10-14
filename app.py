@@ -27,11 +27,11 @@ def run_ots_command(label, command):
     )
     output = result.stdout or ''
     logger.info(
-        'OpenTimestamps %s command exited with code %s; output length=%s; output preview=%r',
+        'OpenTimestamps %s command exited with code %s; output length=%s; full output follows:\n%s',
         label,
         result.returncode,
         len(output),
-        output[:2000],
+        output,
     )
     return result
 
