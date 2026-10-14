@@ -12,7 +12,8 @@ from translations import FILE_PAGE_TRANSLATIONS, LANGUAGES, NOT_FOUND_MESSAGES, 
 
 
 app = Flask(__name__)
-logger = logging.getLogger(__name__)
+logger = app.logger
+logger.setLevel(logging.INFO)
 
 
 def run_ots_command(label, command):
