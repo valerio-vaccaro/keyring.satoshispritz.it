@@ -6,6 +6,7 @@ import re
 import random
 import subprocess
 import logging
+import tempfile
 
 from translations import FILE_PAGE_TRANSLATIONS, LANGUAGES, NOT_FOUND_MESSAGES, TRANSLATIONS
 
@@ -18,15 +19,15 @@ logger.setLevel(logging.INFO)
 
 def run_ots_command(label, command):
     logger.info('Running OpenTimestamps %s command: %r', label, command)
-    result = subprocess.run(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        errors='replace',
-        check=False,
-    )
-    output = result.stdout or ''
+    with tempfile.TemporaryFile(mode='w+t', encoding='utf-8', errors='replace') as output_file:
+        result = subprocess.run(
+            command,
+            stdout=output_file,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+        output_file.seek(0)
+        output = output_file.read()
     logger.info(
         'OpenTimestamps %s command exited with code %s; output length=%s; full output follows:\n%s',
         label,
@@ -34,7 +35,7 @@ def run_ots_command(label, command):
         len(output),
         output,
     )
-    return result
+    return subprocess.CompletedProcess(command, result.returncode, stdout=output)
 
 
 def current_language():
