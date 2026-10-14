@@ -5,12 +5,35 @@ from pathlib import Path
 import re
 import random
 import subprocess
+import logging
 
 from translations import FILE_PAGE_TRANSLATIONS, LANGUAGES, NOT_FOUND_MESSAGES, TRANSLATIONS
 
 
 
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
+
+
+def run_ots_command(label, command):
+    logger.info('Running OpenTimestamps %s command: %r', label, command)
+    result = subprocess.run(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        errors='replace',
+        check=False,
+    )
+    output = result.stdout or ''
+    logger.info(
+        'OpenTimestamps %s command exited with code %s; output length=%s; output preview=%r',
+        label,
+        result.returncode,
+        len(output),
+        output[:2000],
+    )
+    return result
 
 
 def current_language():
@@ -77,25 +100,16 @@ def key():
     proof_unavailable = FILE_PAGE_TRANSLATIONS[current_language()]['proof_unavailable']
     if proof_path.is_file():
         try:
-            info_result = subprocess.run(
-                ['/usr/local/bin/ots-cli.js', 'i', str(proof_path)],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                errors='replace',
-                check=False,
+            info_result = run_ots_command(
+                'info', ['/usr/local/bin/ots-cli.js', 'i', str(proof_path)]
             )
-            verify_result = subprocess.run(
-                ['/usr/local/bin/ots-cli.js', 'v', str(proof_path), '-i'],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                errors='replace',
-                check=False,
+            verify_result = run_ots_command(
+                'verify', ['/usr/local/bin/ots-cli.js', 'v', str(proof_path), '-i']
             )
             info = info_result.stdout.strip() or proof_unavailable
             verify = verify_result.stdout.strip() or proof_unavailable
         except OSError:
+            logger.exception('Could not run OpenTimestamps commands for %s', proof_path)
             info = proof_unavailable
             verify = proof_unavailable
     else:
