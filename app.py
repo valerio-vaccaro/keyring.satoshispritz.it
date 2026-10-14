@@ -78,7 +78,7 @@ def key():
     if proof_path.is_file():
         try:
             info_result = subprocess.run(
-                ['ots-cli.js', 'i', str(proof_path)],
+                ['/usr/local/bin/ots-cli.js', 'i', str(proof_path)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
@@ -86,7 +86,7 @@ def key():
                 check=False,
             )
             verify_result = subprocess.run(
-                ['ots-cli.js', 'v', str(proof_path), '-i'],
+                ['/usr/local/bin/ots-cli.js', 'v', str(proof_path), '-i'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
